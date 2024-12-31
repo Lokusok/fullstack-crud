@@ -19,6 +19,6 @@ Route::controller(CinemaController::class)->group(function () {
     Route::post('/cinemas', 'store')->name('cinemas.store')->middleware('is_admin');
     Route::get('/cinemas', 'index')->name('cinemas.index');
     Route::get('/cinemas/{id}', 'show')->name('cinemas.show');
-    Route::put('/cinemas/{id}')->name('cinemas.update')->middleware('is_admin');
-    Route::delete('/cinemas/{id}')->name('cinemas.delete')->middleware('is_admin');
+    Route::put('/cinemas/{id}', 'update')->name('cinemas.update')->middleware('is_admin');
+    Route::delete('/cinemas/{id}', 'destroy')->name('cinemas.destroy')->middleware('is_admin');
 });

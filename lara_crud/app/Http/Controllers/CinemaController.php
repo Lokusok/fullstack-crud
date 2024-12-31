@@ -9,17 +9,22 @@ class CinemaController extends Controller
 {
     public function index()
     {
-        return Cinema::all();
-    }
-
-    public function create()
-    {
-        //
+        return Cinema::query()->orderBy('created_at', 'DESC')->get();
     }
 
     public function store(Request $request)
     {
-        //
+        $cinema = new Cinema();
+
+        $data = json_decode($request->getContent(), true);
+
+        $cinema->title = $data['title'];
+        $cinema->description = $data['description'];
+        $cinema->image_url = $data['imageUrl'];
+
+        $cinema->save();
+
+        return response()->json($cinema, 201);
     }
 
     public function show(Request $request, string $id)
@@ -39,19 +44,28 @@ class CinemaController extends Controller
         return $cinema;
     }
 
-    public function edit(string $id)
-    {
-        //
-    }
-
     public function update(Request $request, string $id)
     {
-        //
+        $cinema = Cinema::findOrFail($id);
+
+        $data = json_decode($request->getContent(), true);
+
+        $cinema->title = $data['title'];
+        $cinema->description = $data['description'];
+        $cinema->image_url = $data['imageUrl'];
+
+        $cinema->save();
+
+        return response()->json($cinema, 201);
     }
 
     public function destroy(string $id)
     {
-        //
+        $cinema = Cinema::findOrFail($id);
+
+        $cinema->delete();
+
+        return response(status: 204);
     }
 
     public function search(Request $request)

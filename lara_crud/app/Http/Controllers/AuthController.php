@@ -16,8 +16,10 @@ class AuthController extends Controller
 
         $cookie = cookie('token', 123, minutes: 60);
 
-        return response()->json([
-            'message' => 'success'
-        ], 200)->withCookie($cookie);
+        return response()
+            ->json([
+                'message' => 'success'
+            ], 200)
+            ->withCookie($cookie);
     }
 }
