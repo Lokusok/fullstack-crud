@@ -90,7 +90,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <v-btn :to="{ name: 'films.index' }" color="primary">
+    <v-btn :to="{ name: 'films.show', params: { id: filmId } }" color="primary">
         <v-icon
           icon="mdi-arrow-left"
           start

@@ -8,7 +8,7 @@ const items = ref([
   {
     title: 'Все фильмы',
     props: {
-      to: '/',
+      to: { name: 'films.index' },
       prependIcon: 'mdi-account-multiple'
     }
   },
@@ -33,7 +33,7 @@ watch(() => adminStore.isAdmin, () => {
     items.value.push({
       title: 'Добавить фильм',
       props: {
-        to: '/films/create',
+        to: { name: 'films.create' },
         prependIcon: 'mdi-grid'
       }
     });

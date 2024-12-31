@@ -5,6 +5,7 @@ import SingleFilmView from "./views/SingleFilmView.vue";
 import CreateFilmView from "./views/CreateFilmView.vue";
 import EditFilmView from "./views/EditFilmView.vue";
 import AdminAuthView from "./views/AdminAuthView.vue";
+import { useAdminStore } from "./stores/admin";
 
 const routes = [
     { path: '/', component: AllFilmsView, name: 'films.index' },
@@ -17,6 +18,29 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+
+const onlyForAdmin = [
+    'films.create',
+    'films.edit',
+];
+
+const onlyForGuests = [
+    'admin.auth'
+];
+
+router.beforeEach((to) => {
+    const adminStore = useAdminStore();
+
+    // Если админ и пытается в только гостевые страницы
+    if (onlyForGuests.includes(to.name as string) && adminStore.isAdmin) {
+        return false;
+    }
+
+    // Если гость и пытается в админку
+    if (onlyForAdmin.includes(to.name as string) && ! adminStore.isAdmin) {
+        return false;
+    }
 });
 
 export default router;
