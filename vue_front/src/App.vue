@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useAdminStore } from './stores/admin';
 
+const checkAdmin = ref(false);
 const drawer = ref(false);
 
-const items = [
+const items = ref([
   {
     title: 'Все фильмы',
     props: {
@@ -11,14 +13,35 @@ const items = [
       prependIcon: 'mdi-account-multiple'
     }
   },
-  {
-    title: 'Добавить фильм',
-    props: {
-      to: '/films/create',
-      prependIcon: 'mdi-grid'
+]);
+
+const adminStore = useAdminStore();
+
+watch(() => adminStore.isAdmin, () => {
+  if (checkAdmin.value) {
+    return;
+  }
+
+  checkAdmin.value = true;
+
+  if (! adminStore.isAdmin) {
+    const isAdmin = localStorage.getItem('is_admin');
+
+    if (isAdmin) {
+      adminStore.setAdmin(true);
     }
-  },
-];
+  }
+
+  if (adminStore.isAdmin) {
+    items.value.push({
+      title: 'Добавить фильм',
+      props: {
+        to: '/films/create',
+        prependIcon: 'mdi-grid'
+      }
+    });
+  }
+}, { immediate: true });
 </script>
 
 <template>
@@ -34,6 +57,20 @@ const items = [
       </template>
 
       <v-app-bar-title>Laravel + Vue | simple crud</v-app-bar-title>
+
+      <template v-slot:append>
+          <template v-if="!adminStore.isAdmin">
+            <v-btn to="/admin/auth" prepend-icon="mdi-account">
+              Войти
+            </v-btn>
+          </template>
+
+          <template v-else>
+            <v-btn disabled prepend-icon="mdi-account">
+              Успешный вход!
+            </v-btn>
+          </template>
+      </template>
     </v-app-bar>
 
     <v-navigation-drawer

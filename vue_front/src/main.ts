@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
 import '@mdi/font/css/materialdesignicons.css'
 
@@ -18,8 +19,11 @@ const vuetify = createVuetify({
     }
 });
 
+const pinia = createPinia();
+
 const app = createApp(App);
 
+app.use(pinia);
 app.use(router);
 app.use(vuetify);
 

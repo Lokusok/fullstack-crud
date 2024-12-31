@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { TFilm } from '../types/films';
 
 const initialLoading = ref(true);
@@ -7,6 +7,10 @@ const loading = ref(true);
 
 const films = ref<TFilm[]>([]);
 const searchQuery = ref('');
+
+const isSearchBtnDisabled = computed(() => {
+    return searchQuery.value === '';
+});
 
 const apiCalls = {
     async getFilms() {
@@ -52,41 +56,45 @@ const handleSearchInput = async () => {
 <template>
     <h1 class="mb-3">Все фильмы</h1>
 
-    <v-row class="ga-5">
-        <template v-if="initialLoading">
-            <v-skeleton-loader
-                width="90%"
-                height="40"
-            />
+    <form @submit.prevent="handleSearchClick">
+        <v-row class="ga-5">
+            <template v-if="initialLoading">
+                <v-skeleton-loader
+                    width="90%"
+                    height="40"
+                />
 
-            <v-skeleton-loader
-                class="mt-1"
-                width="95"
-                height="36"
-            />
-        </template>
+                <v-skeleton-loader
+                    class="mt-1"
+                    width="95"
+                    height="36"
+                />
+            </template>
 
-        <template v-else>
-            <v-text-field
-                v-model="searchQuery"
-                label="Поиск по названию"
-                clearable
-                @click:clear="handleSearchClear"
-                @input="handleSearchInput"
-            >
-            </v-text-field>
-            <div class="py-3">
-                <v-btn
-                    color="primary"
-                    @click="handleSearchClick"
+            <template v-else>
+                <v-text-field
+                    v-model="searchQuery"
+                    label="Поиск по названию"
+                    clearable
+                    @click:clear="handleSearchClear"
+                    @input="handleSearchInput"
                 >
-                    Искать
-                </v-btn>
-            </div>
-        </template>
-    </v-row>
+                </v-text-field>
+                <div class="py-3">
+                    <v-btn
+                        :disabled="isSearchBtnDisabled"
+                        color="primary"
+                        type="submit"
+                        @click="handleSearchClick"
+                    >
+                        Искать
+                    </v-btn>
+                </div>
+            </template>
+        </v-row>
+    </form>
 
-    <v-row v-if="films">
+    <v-row class="mt-4" v-if="films">
         <template v-if="loading">
             <v-col
                 v-for="n in 6"

@@ -2,9 +2,12 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { TFilm } from '../types/films';
+import { useAdminStore } from '../stores/admin';
 
 const film = ref<TFilm | null>(null);
 const route = useRoute()
+
+const adminStore = useAdminStore();
 
 onMounted(async () => {
     const response = await fetch('http://localhost:8000/api/cinemas/' + route.params.id);
@@ -49,18 +52,20 @@ onMounted(async () => {
         <p>{{ film.description }}</p>
         <v-img :src="film.image_url" width="300" height="300" cover />
         
-        <v-divider class="my-3"></v-divider>
-        
-        <div class="d-flex ga-3">
-            <v-btn color="secondary">
-                <v-icon icon="mdi-brush" start />
-                Перейти к редактированию
-            </v-btn>
-
-            <v-btn color="red">
-                <v-icon icon="mdi-delete" start />
-                Удалить
-            </v-btn>
-        </div>
+        <template v-if="adminStore.isAdmin">
+            <v-divider class="my-3"></v-divider>
+            
+            <div class="d-flex ga-3">
+                <v-btn :to="{ name: 'films.edit', params: { id: film.id } }" color="secondary">
+                    <v-icon icon="mdi-brush" start />
+                    Перейти к редактированию
+                </v-btn>
+    
+                <v-btn color="red">
+                    <v-icon icon="mdi-delete" start />
+                    Удалить
+                </v-btn>
+            </div>
+        </template>
     </template>
 </template>
