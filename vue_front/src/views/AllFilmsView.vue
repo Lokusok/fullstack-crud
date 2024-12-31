@@ -14,14 +14,14 @@ const isSearchBtnDisabled = computed(() => {
 
 const apiCalls = {
     async getFilms() {
-        const response = await fetch('http://localhost:8000/api/cinemas');
+        const response = await fetch('http://localhost:8000/api/films');
         const data = await response.json();
 
         films.value = data;
     },
 
     async getFilmsBy(query: string) {
-        const response = await fetch('http://localhost:8000/api/cinemas/search?q=' + query)
+        const response = await fetch('http://localhost:8000/api/films/search?q=' + query)
         const data = await response.json();
 
         films.value = data;

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cinema;
+use App\Models\Film;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $cinemas = [
+        $films = [
             [
                 'title' => 'The lord of the rings. The fellowship of the ring',
                 'description' => 'Lorem ipsum dolor sit amet',
@@ -34,8 +34,8 @@ class DatabaseSeeder extends Seeder
             ]
         ];
 
-        foreach ($cinemas as $cinema) {
-            Cinema::create($cinema);
+        foreach ($films as $film) {
+            Film::create($film);
         }
     }
 }

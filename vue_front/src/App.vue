@@ -2,7 +2,6 @@
 import { ref, watch } from 'vue';
 import { useAdminStore } from './stores/admin';
 
-const checkAdmin = ref(false);
 const drawer = ref(false);
 
 const items = ref([
@@ -18,11 +17,9 @@ const items = ref([
 const adminStore = useAdminStore();
 
 watch(() => adminStore.isAdmin, () => {
-  if (checkAdmin.value) {
+  if (items.value.some((item) => item.title === 'Добавить фильм')) {
     return;
   }
-
-  checkAdmin.value = true;
 
   if (! adminStore.isAdmin) {
     const isAdmin = localStorage.getItem('is_admin');

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CinemaController;
+use App\Http\Controllers\FilmController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,12 +13,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/admin/auth', 'authenticate')->name('admin.auth');
 });
 
-Route::controller(CinemaController::class)->group(function () {
-    Route::get('/cinemas/search', 'search')->name('cinemas.search');
+Route::controller(FilmController::class)->group(function () {
+    Route::get('/films/search', 'search')->name('films.search');
 
-    Route::post('/cinemas', 'store')->name('cinemas.store')->middleware('is_admin');
-    Route::get('/cinemas', 'index')->name('cinemas.index');
-    Route::get('/cinemas/{id}', 'show')->name('cinemas.show');
-    Route::put('/cinemas/{id}', 'update')->name('cinemas.update')->middleware('is_admin');
-    Route::delete('/cinemas/{id}', 'destroy')->name('cinemas.destroy')->middleware('is_admin');
+    Route::post('/films', 'store')->name('films.store')->middleware('is_admin');
+    Route::get('/films', 'index')->name('films.index');
+    Route::get('/films/{id}', 'show')->name('films.show');
+    Route::put('/films/{id}', 'update')->name('films.update')->middleware('is_admin');
+    Route::delete('/films/{id}', 'destroy')->name('films.destroy')->middleware('is_admin');
 });

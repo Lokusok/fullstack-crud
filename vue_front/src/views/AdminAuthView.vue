@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useAdminStore } from '../stores/admin';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const loading = ref(false);
 const token = ref('');
@@ -16,6 +16,7 @@ const apiCalls = {
             headers: {
                 'X-TOKEN': '123'
             },
+            credentials: 'include'
         });
 
         if (response.status === 200) {

@@ -1,24 +1,42 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { TFilm } from '../types/films';
 import { useAdminStore } from '../stores/admin';
 
+const waitingDelete = ref(false);
+
 const film = ref<TFilm | null>(null);
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 
 const adminStore = useAdminStore();
 
 onMounted(async () => {
-    const response = await fetch('http://localhost:8000/api/cinemas/' + route.params.id);
+    const response = await fetch('http://localhost:8000/api/films/' + route.params.id);
     const data = await response.json();
 
     film.value = data;
 });
+
+const deleteFilm = async () => {
+    waitingDelete.value = true;
+
+    const response = await fetch('http://localhost:8000/api/films/' + route.params.id, {
+        method: 'DELETE',
+        credentials: 'include'
+    });
+
+    if (response.ok) {
+        router.replace({ name: 'films.index' });
+    }
+
+    waitingDelete.value = true;
+};
 </script>
 
 <template>
-    <v-btn to="/" color="primary">
+    <v-btn :to="{ name: 'films.index' }" color="primary">
         <v-icon
           icon="mdi-arrow-left"
           start
@@ -61,10 +79,38 @@ onMounted(async () => {
                     Перейти к редактированию
                 </v-btn>
     
-                <v-btn color="red">
-                    <v-icon icon="mdi-delete" start />
-                    Удалить
-                </v-btn>
+                <v-dialog max-width="500">
+                    <template v-slot:activator="{ props: activatorProps }">
+                        <v-btn
+                            v-bind="activatorProps"
+                            color="red"
+                            text="Удалить"
+                        />
+                    </template>
+
+                    <template v-slot:default="{ isActive }">
+                        <v-card title="Подтверждение">
+                        <v-card-text>
+                            Вы уверены, что хотите удалить данный фильм?
+                        </v-card-text>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                                text="Отмена"
+                                @click="isActive.value = false"
+                            />
+                            <v-btn
+                                color="red"
+                                text="Удалить"
+                                :loading="waitingDelete"
+                                @click="deleteFilm"
+                            />
+                        </v-card-actions>
+                        </v-card>
+                    </template>
+                </v-dialog>
             </div>
         </template>
     </template>
